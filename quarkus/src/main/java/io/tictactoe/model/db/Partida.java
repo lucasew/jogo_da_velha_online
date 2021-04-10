@@ -1,18 +1,24 @@
-package io.tictactoe.model;
+package io.tictactoe.model.db;
+
+import org.graalvm.compiler.lir.CompositeValue;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "tb_partida")
-public class Partida {
+//@Table(name = "tb_partida")
+public class Partida implements Serializable  {
+    @Column
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @ManyToOne
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private Usuario jogadorA;
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private Usuario jogadorB;
 
+    @Column
     @Enumerated(EnumType.STRING)
     private PartidaResultado resultado;
 

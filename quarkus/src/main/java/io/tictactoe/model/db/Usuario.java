@@ -1,30 +1,36 @@
-package io.tictactoe.model;
+package io.tictactoe.model.db;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_usuario")
-public class Usuario {
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "username", columnNames = {"nome"})
+})
+//@Table(name = "tb_usuario")
+public class Usuario implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToMany(
             cascade = CascadeType.DETACH,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private List<Partida> partidas = new ArrayList<>();
+    private List<Partida> partidas;
 
+    @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotBlank(message="Usuários tem que ter um nome")
     @Pattern(regexp = "[a-zA-Z_-]*")
     private String nome;
 
+    @Column
     @NotBlank(message="Senha não pode estar vazia")
     private String senha;
 
@@ -52,9 +58,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(long id, List<Partida> partidas, @NotBlank(message = "Usuários tem que ter um nome") @Pattern(regexp = "[a-zA-Z_-]*") String nome, @NotBlank(message = "Senha não pode estar vazia") String senha) {
-        this.id = id;
-        this.partidas = partidas;
+    public Usuario(@NotBlank(message = "Usuários tem que ter um nome") @Pattern(regexp = "[a-zA-Z_-]*") String nome, @NotBlank(message = "Senha não pode estar vazia") String senha) {
         this.nome = nome;
         this.senha = senha;
     }
