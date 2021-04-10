@@ -1,0 +1,71 @@
+:root {
+    --text: white;
+    --background: #161616;
+    --background-secondary: #151515;
+    --foreground: black;
+}
+
+/*:root {*/
+/*    --text: black;*/
+/*    --background: white;*/
+/*    --background-secondary: white;*/
+/*    --foreground: black;*/
+/*}*/
+
+body {
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: var(--background);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.authentication-form {
+    justify-content: center;
+    align-items: center;
+}
+
+.authentication-form button {
+    cursor: pointer;
+}
+
+input:focus, button:focus {
+    outline: none !important;
+    border: black 3px solid;
+}
+
+input, button {
+    text-align: center;
+    background-color: var(--background-secondary);
+    border: black 1px solid;
+    border-radius: 10px;
+    margin: 5px;
+    color: var(--text);
+
+    padding: 10px;
+
+    width: 100%;
+}
+
+button { /* GAMBIARRA ALERT: O botão não fecha a largura sem isso */
+    width: 110%;
+}
+
+h1, p, a {
+    color: var(--text);
+}
+
+

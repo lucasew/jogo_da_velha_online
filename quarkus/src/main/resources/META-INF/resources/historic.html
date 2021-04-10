@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de partidas</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <style>
+        table {
+            width: 90%;
+            table-layout: fixed;
+            text-align: center;
+        }
+        main {
+            justify-content: flex-start;
+        }
+    </style>
+    <header>
+        <h1>Histórico de partidas</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+            <tr>
+                <th>Adversário</th>
+                <th>Resultado</th>
+            </tr>
+            </thead>
+            <tbody id="partidas">
+            <tr>
+                <td>John Doe</td>
+                <td>Ganho</td>
+            </tr>
+            <tr>
+                <td>John Doe</td>
+                <td>Velha</td>
+            </tr>
+            <tr>
+                <td>John Doe</td>
+                <td>Abandonada</td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+    <script>
+        function addPartida(usuario, estado) {
+            let row = document.createElement("tr")
+            let eUsuario = document.createElement("td")
+            eUsuario.innerText = usuario
+            let eEstado = document.createElement("td")
+            eEstado.innerText = estado
+            row.appendChild(eUsuario)
+            row.appendChild(eEstado)
+            document.getElementById("partidas").appendChild(row)
+        }
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>
