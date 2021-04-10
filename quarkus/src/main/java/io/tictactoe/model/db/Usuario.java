@@ -1,5 +1,7 @@
 package io.tictactoe.model.db;
 
+import io.quarkus.security.jpa.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@UserDefinition
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "username", columnNames = {"nome"})
 })
@@ -28,10 +31,16 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotBlank(message="Usuários tem que ter um nome")
     @Pattern(regexp = "[a-zA-Z_-]*")
+    @Username
     private String nome;
+
+    @Roles
+    @Transient
+    public String roles = "user"; // usado internamente pelo controle de acesso do quarkus
 
     @Column
     @NotBlank(message="Senha não pode estar vazia")
+    @Password(PasswordType.CLEAR)
     private String senha;
 
     public long getId() {

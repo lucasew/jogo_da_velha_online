@@ -7,7 +7,7 @@ import io.tictactoe.model.db.Usuario;
 import java.io.Serializable;
 
 public class PartidaJogada implements Serializable {
-    public Usuario adversario;
+    public String adversario;
     public PartidaResultado resultado;
 
     PartidaResultado inverter(PartidaResultado r) {
@@ -22,10 +22,10 @@ public class PartidaJogada implements Serializable {
     public PartidaJogada(Usuario u, Partida p) {
         if (p.getJogadorA().getId() == u.getId()) {
             this.resultado = p.getResultado();
-            this.adversario = p.getJogadorB();
+            this.adversario = p.getJogadorB().getNome();
         } else {
             this.resultado = this.inverter(p.getResultado());
-            this.adversario = p.getJogadorA();
+            this.adversario = p.getJogadorA().getNome();
         }
     }
 }

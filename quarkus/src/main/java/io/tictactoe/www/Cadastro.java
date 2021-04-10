@@ -4,6 +4,7 @@ import io.tictactoe.controller.ResponseController;
 import io.tictactoe.model.Response;
 import io.tictactoe.model.db.Usuario;
 
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,6 +22,7 @@ public class Cadastro {
 
     @GET // TODO: mudar pra POST depois, deixei assim pra poder usar no browser
     @Transactional
+    @PermitAll
     public Response cadastrar(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) {
         return new ResponseController(() -> {
             Usuario u = new Usuario(usuario, senha);
