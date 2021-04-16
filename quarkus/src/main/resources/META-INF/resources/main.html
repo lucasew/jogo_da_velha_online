@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
     <title>Jogo da velha online</title>
 </head>
 <body>
-    <h1>Jogo da Velha Online</h1>
-    <a class="btn" href="board.html">Jogar</a>
-    <a class="btn" href="historic.html">Ver histórico de partidas</a>
-    <div></div>
+    <header>
+        <h1>Jogo da Velha Online</h1>
+    </header>
+    <main>
+        <div>
+            <button onclick="goto('/board.html')">Jogar</button>
+            <button onclick="goto('/historic.html')">Ver histórico de partidas</button>
+        </div>
+    </main>
     <script src="index.js"></script>
 </body>
 </html>

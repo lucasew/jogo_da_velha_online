@@ -8,7 +8,9 @@
 //
 
 function goto(href) {
-    window.location.href = href
+    let u = new URL(window.location)
+    u.pathname = href
+    window.location.href = u.toString()
 }
 
 const header = document.getElementsByTagName("header").item(0)

@@ -64,7 +64,7 @@ button { /* GAMBIARRA ALERT: O botão não fecha a largura sem isso */
     width: 110%;
 }
 
-h1, p, a {
+h1, p, a, th, td {
     color: var(--text);
 }
 
