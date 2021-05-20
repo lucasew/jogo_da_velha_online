@@ -1,8 +1,8 @@
 package io.tictactoe.controller;
 
 import io.tictactoe.model.Response;
+import io.tictactoe.model.errors.AppException;
 
-import javax.ws.rs.BadRequestException;
 import java.util.concurrent.Callable;
 
 public class ResponseController<T> implements Callable<Response<T>> {
@@ -15,15 +15,17 @@ public class ResponseController<T> implements Callable<Response<T>> {
 
     @Override
     public Response<T> call() {
-        Response<T> res = new Response<T>();
+        Response<T> res = new Response<>();
         try {
             res.data = action.call();
-        } catch (Throwable e) {
+        }
+        catch (AppException e) {
+            res.error = String.format("ERRO DE APLICAÇÃO: %s", e.getLocalizedMessage());
+        }
+        catch (Throwable e) {
             res.error = e.getLocalizedMessage();
             e.printStackTrace();
         }
-        finally {
-            return res;
-        }
+        return res;
     }
 }

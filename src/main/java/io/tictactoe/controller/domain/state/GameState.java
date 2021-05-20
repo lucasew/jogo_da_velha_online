@@ -2,40 +2,40 @@ package io.tictactoe.controller.domain.state;
 
 import io.tictactoe.controller.db.HistoricoController;
 import io.tictactoe.controller.db.UsuarioController;
-import io.tictactoe.controller.domain.board.Board;
-import io.tictactoe.controller.domain.eventloop.EventLoopAction;
+import io.tictactoe.controller.domain.board.PlayerFrontend;
+import io.tictactoe.model.errors.GameLogicException;
+import io.tictactoe.model.errors.NotFoundException;
+import io.tictactoe.model.errors.NotYourTurnException;
+import io.tictactoe.utils.MatchIDGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 
-public class GameState implements Runnable {
+public class GameState {
     // Infraestrutura de controle da aplicação
-    public Map<String, Board> matches = new HashMap<>();
-    public ArrayBlockingQueue<EventLoopAction> eventLoop = new ArrayBlockingQueue<>(100);
+    public Map<String, PlayerFrontend> matches = new HashMap<>();
+
+    public synchronized void playMatch(String room, int position) throws GameLogicException, NotYourTurnException {
+        matches.get(room).play(position);
+    }
+
+    public synchronized String putPlayerFrontend(PlayerFrontend f) {
+        String id = MatchIDGenerator.generateMatchID();
+        matches.put(id, f);
+        return id;
+    }
+
+    public synchronized PlayerFrontend getPlayerFrontend(String key) throws NotFoundException {
+        PlayerFrontend res = matches.getOrDefault(key, null);
+        if (res == null) {
+            throw new NotFoundException();
+        }
+        return res;
+    }
 
     // Controllers (local padronizado)
     public HistoricoController historicoController = new HistoricoController();
     public UsuarioController usuarioController = new UsuarioController();
 
-    // Controle de concorrência, talvez seja até desnecessário
-    boolean isStop = false;
-
-    public GameState() {
-    }
-
-    public void run() {
-        while(!isStop) {
-            System.out.println("Game state tick");
-            try {
-                EventLoopAction action = eventLoop.poll();
-                if (action == null) { // se sem ação então a mimir
-                    Thread.sleep(100);
-                }
-            } catch(Exception e) {
-                System.out.println("Execução de item do event loop falhou");
-                e.printStackTrace();
-            }
-        }
-    }
+    public GameState() {}
 }
