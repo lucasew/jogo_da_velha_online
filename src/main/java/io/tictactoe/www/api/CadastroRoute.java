@@ -1,6 +1,8 @@
-package io.tictactoe.www;
+package io.tictactoe.www.api;
 
 import io.tictactoe.controller.ResponseController;
+import io.tictactoe.controller.domain.state.GameState;
+import io.tictactoe.controller.domain.state.GameStateSingleton;
 import io.tictactoe.model.Response;
 import io.tictactoe.model.db.Usuario;
 
@@ -16,18 +18,17 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 //@Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class Cadastro {
+public class CadastroRoute {
     @Inject
     EntityManager em; // Maracutaia do quarkus
+
+    @Inject
+    GameState g;
 
     @GET // TODO: mudar pra POST depois, deixei assim pra poder usar no browser
     @Transactional
     @PermitAll
     public Response cadastrar(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) {
-        return new ResponseController(() -> {
-            Usuario u = new Usuario(usuario, senha);
-            em.persist(u);
-            return new Long(u.getId());
-        }).call();
+        return new ResponseController(() -> g.usuarioController.createUsuario(usuario, senha).getId()).call();
     }
 }

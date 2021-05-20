@@ -1,12 +1,15 @@
-package io.tictactoe.www;
+package io.tictactoe.www.api;
 
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.tictactoe.controller.ResponseController;
+import io.tictactoe.controller.domain.state.GameState;
+import io.tictactoe.controller.domain.state.GameStateSingleton;
 import io.tictactoe.model.db.Partida;
 import io.tictactoe.model.db.PartidaResultado;
 import io.tictactoe.model.db.Usuario;
+import io.tictactoe.model.errors.UserNotFoundException;
 import io.tictactoe.model.result.PartidaJogada;
 
 import javax.annotation.security.RolesAllowed;
@@ -25,29 +28,17 @@ import java.util.List;
 @Path("/api/historico")
 @Produces(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class HistoricoDeJogadas {
-    @Inject
-    EntityManager em;
+public class HistoricoRoute {
     @Inject
     SecurityIdentity identity;
 
+    @Inject
+    GameState g;
+
     @GET
     @RolesAllowed("user")
-    public ResponseController<Object[]> getHistoricoDePartidas() {
-        System.out.println(identity.getPrincipal().getName());
-        return new ResponseController<Object[]>(() -> {
-            Query uq = em.createQuery("select u from Usuario u where u.nome = :nome");
-            uq.setParameter("nome", identity.getPrincipal().getName());
-            Usuario u = (Usuario) uq.getResultList().get(0);
-            List<PartidaJogada> res = new ArrayList<>();
-            Query q = em.createQuery("select p from Partida p where Partida.jogadorA.id = :id or Partida.jogadorB.id = :id");
-            q.setParameter("id", u.getId());
-            q.getResultStream().forEach((e) -> {
-                Partida p = (Partida) e;
-                res.add(new PartidaJogada(u, p));
-            });
-            return res.toArray();
-        });
-
+    public ResponseController<List<PartidaJogada>> getHistoricoDePartidas() throws UserNotFoundException {
+        Usuario u = g.usuarioController.getUsuarioByUsername(identity.getPrincipal().getName());
+        return new ResponseController<>(() -> g.historicoController.getPartidasJogadas(u));
     }
 }

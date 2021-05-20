@@ -1,7 +1,5 @@
 package io.tictactoe.model.db;
 
-import org.graalvm.compiler.lir.CompositeValue;
-
 import javax.persistence.*;
 import java.io.Serializable;
 

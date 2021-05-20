@@ -1,4 +1,4 @@
-package io.tictactoe.www;
+package io.tictactoe.www.api;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/api/login-status")
 @Produces(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class LoginStatus {
+public class LoginStatusRoute {
     @GET
     @RolesAllowed("user")
     public boolean isLogado() { // se for false ele vai dar erro
