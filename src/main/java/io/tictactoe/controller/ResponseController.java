@@ -7,11 +7,9 @@ import java.util.concurrent.Callable;
 
 public class ResponseController<T> implements Callable<Response<T>> {
     private final Callable<T> action;
-
     public ResponseController(Callable<T> action) {
         this.action = action;
     }
-
 
     @Override
     public Response<T> call() {

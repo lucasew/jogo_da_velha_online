@@ -52,7 +52,7 @@
         </table>
         <h1>Jogando contra: <span id="adversary">[ninguém]</span></h1>
     </main>
-
+    <script src="index.js"></script>
 <script>
         function updateBoard(board) {
             let elems = []
@@ -80,7 +80,20 @@
             elem.addEventListener('click', play(i))
             elem.style.cursor = 'pointer'
         }
+        async function handle() {
+            if (!await check_login()) {
+                alert("Você não está logado");
+                window.location.assign("login.html");
+            }
+            resRoom = await wrappedFetch("/api/new-match")
+            if (!resRoom.ok) {
+                alert("Não foi possivel criar a sala");
+                console.log(resRoom)
+            }
+            window.room_id = await resRoom.json();
+            console.log(window.room_id.data)
+        }
+        handle();
     </script>
-    <script src="index.js"></script>
 </body>
 </html>

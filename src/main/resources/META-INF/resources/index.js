@@ -26,15 +26,17 @@ function getAuthenticationElement(element) {
         if (ls == null) {
             return "";
         } else {
+            console.log(`encontrado ${element} no localstorage`)
             return ls;
         }
     } else {
+        console.log(`encontrado ${element} em formulário`)
         return elem.value;
     }
 }
 
 function getAuthenticationData() {
-    const user = getAuthenticationElement("login");
+    const user = getAuthenticationElement("user");
     const password = getAuthenticationElement("password")
     return {
         user,
@@ -60,20 +62,26 @@ function storeFormLoginData() {
     localStorage.setItem("password", password);
 }
 
-async function handle_login() {
+async function check_login() {
     const res = await wrappedFetch("/api/login-status");
-    if (!res.ok) {
+    return res.ok
+}
+async function handle_login() {
+    if (!await check_login()) {
         alert("Login inválido");
     } else {
         await storeFormLoginData();
         alert("Logado com sucesso")
-        window.location.assign("/main.html");
+        goto("/main.html");
     }
 }
 
 async function handle_signup() {
     const {user, password} = getAuthenticationData();
     const res = await fetch(`/api/cadastro?usuario=${user}&senha=${password}`)
-    alert("cadastro")
+    if (res.status) {
+        alert("Usuário já existente");
+    }
+    console.log(res)
 }
 
