@@ -21,9 +21,25 @@ public class BoardRoute {
     MatchController mc;
 
     @GET
-    public Response<Board> getBoard(
+    public Response<BoardRouteResult> getBoard(
             @QueryParam("front_id") String front
     ) {
-        return new ResponseController<>(() -> mc.getPlayerFrontend(front).getBoard()).call();
+        return new ResponseController<>(() -> {
+            Board board = mc.getPlayerFrontend(front).getBoard();
+            String adversary = mc.getAdversaryName(front);
+            return new BoardRouteResult(board, adversary);
+        }).call();
     }
 }
+
+
+class BoardRouteResult {
+    public Board board;
+    public String adversary;
+
+    public BoardRouteResult(Board board, String adversary) {
+        this.board = board;
+        this.adversary = adversary;
+    }
+}
+

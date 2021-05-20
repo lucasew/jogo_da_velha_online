@@ -17,12 +17,12 @@ import javax.ws.rs.core.MediaType;
 @ApplicationScoped
 public class CadastroRoute {
     @Inject
-    UsuarioController g;
+    UsuarioController usuarioController;
 
     @GET // TODO: mudar pra POST depois, deixei assim pra poder usar no browser
     @Transactional
     @PermitAll
     public Response cadastrar(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) {
-        return new ResponseController<>(() -> g.createUsuario(usuario, senha).getId()).call();
+        return new ResponseController<>(() -> usuarioController.createUsuario(usuario, senha).getId()).call();
     }
 }

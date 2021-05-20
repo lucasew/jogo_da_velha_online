@@ -1,5 +1,6 @@
 package io.tictactoe.www.api;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import io.tictactoe.controller.ResponseController;
 import io.tictactoe.controller.domain.MatchController;
 import io.tictactoe.controller.domain.board.Board;
@@ -26,7 +27,8 @@ public class PlayRoute {
     ) {
         return new ResponseController<> (() -> {
             mc.playMatch(front, jogada);
-            return mc.getPlayerFrontend(front).getBoard();
+            Board board = mc.getPlayerFrontend(front).getBoard();
+            return board;
         }).call();
     }
 }

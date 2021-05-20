@@ -33,7 +33,8 @@ public class NewMatchRoute {
     public ResponseController<String> iniciarPartida() {
         return new ResponseController<>(() -> {
             Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
-            return matchController.getMatch(u);
+            String match = matchController.getMatch(u);
+            return match;
         });
     }
 }

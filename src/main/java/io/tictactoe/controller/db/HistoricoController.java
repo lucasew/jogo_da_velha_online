@@ -9,14 +9,14 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Singleton
 public class HistoricoController {
-    @Inject
-    EntityManager em;
+    private static final Logger LOGGER = Logger.getLogger(HistoricoController.class.getName());
 
     @Inject
-    AppLogger appLogger;
+    EntityManager em;
 
     public List<Partida> getPartidasJogadas(Usuario u) {
         Query q = em.createQuery("select p from Partida p where Partida.jogadorA.id = :id or Partida.jogadorB.id = :id");
@@ -26,7 +26,7 @@ public class HistoricoController {
 
     public void putPartida(Partida pu) {
         em.persist(pu);
-        appLogger.info(String.format("Salva partida %s (%s vs %s) Resultado: %s",
+        LOGGER.info(String.format("Salva partida %s (%s vs %s) Resultado: %s",
                 pu.getId(),
                 pu.getJogadorA().getNome(),
                 pu.getJogadorB().getNome(),

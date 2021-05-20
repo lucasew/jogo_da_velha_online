@@ -1,6 +1,7 @@
 package io.tictactoe.controller.domain;
 
 import io.tictactoe.controller.db.HistoricoController;
+import io.tictactoe.controller.db.UsuarioController;
 import io.tictactoe.controller.domain.board.Board;
 import io.tictactoe.controller.domain.board.BoardPlayer;
 import io.tictactoe.controller.domain.board.BoardResult;
@@ -20,9 +21,11 @@ import javax.inject.Singleton;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Singleton
 public class MatchController {
+    private static final Logger LOGGER = Logger.getLogger(MatchController.class.getName());
     private Map<String, PlayerFrontend> matches = new HashMap<>();
     private Map<String, String> adversaries = new HashMap<>();
 
@@ -31,15 +34,24 @@ public class MatchController {
     @Inject
     HistoricoController hc;
 
-    @Inject
-    AppLogger appLogger;
-
     public synchronized PlayerFrontend getPlayerFrontend(String key) throws NotFoundException {
         PlayerFrontend res = matches.getOrDefault(key, null);
         if (res == null) {
             throw new NotFoundException();
         }
         return res;
+    }
+
+    private String getAdversaryFrontendID(String room) throws NotFoundException {
+        String ret = adversaries.getOrDefault(room, null);
+        if (ret == null) {
+            throw new NotFoundException();
+        }
+        return ret;
+    }
+
+    public synchronized String getAdversaryName(String room) throws NotFoundException {
+        return this.getPlayerFrontend(this.getAdversaryFrontendID(room)).getUsuario().getNome();
     }
 
     private Pair<String, String> generateMatchIDs() {
@@ -83,7 +95,7 @@ public class MatchController {
     }
     private void handleEndOfMatchIfEnded(String room) throws NotFoundException {
         if (isMatchDone(room)) {
-            appLogger.info("Room " + room + " e seu adversário terminaram partida.");
+            LOGGER.info("Room " + room + " e seu adversário terminaram partida.");
             String adversary = this.adversaries.get(room);
             PlayerFrontend fx = this.getPlayerFrontend(room);
             PlayerFrontend fo = this.getPlayerFrontend(adversary);
@@ -110,7 +122,7 @@ public class MatchController {
         return PartidaResultado.DESISTENCIA;
     }
     public synchronized void playMatch(String room, int position) throws GameLogicException, NotYourTurnException, NotFoundException {
-        appLogger.info(String.format("Play: %s %d", room, position));
+        LOGGER.info(String.format("Play: %s %d", room, position));
         handleEndOfMatchIfEnded(room);
         PlayerFrontend f = this.getPlayerFrontend(room);
         f.play(position);

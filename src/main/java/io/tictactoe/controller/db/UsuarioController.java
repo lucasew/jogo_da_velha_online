@@ -9,14 +9,13 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Singleton
 public class UsuarioController {
+    private static final Logger LOGGER = Logger.getLogger(UsuarioController.class.getName());
     @Inject
     EntityManager em;
-
-    @Inject
-    AppLogger appLogger;
 
     public UsuarioController() {}
 
@@ -33,7 +32,7 @@ public class UsuarioController {
     public Usuario createUsuario(String usuario, String senha) {
         Usuario u = new Usuario(usuario, senha);
         em.persist(u);
-        appLogger.info("Criado usuário: " + usuario);
+        LOGGER.info("Criado usuário: " + usuario);
         return u;
     }
 }

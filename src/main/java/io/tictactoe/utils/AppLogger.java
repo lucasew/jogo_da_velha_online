@@ -1,30 +1,32 @@
 package io.tictactoe.utils;
 
 import javax.inject.Singleton;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 @Singleton
-public class AppLogger extends java.util.logging.Logger {
-    /**
-     * Protected method to construct a logger for a named subsystem.
-     * <p>
-     * The logger will be initially configured with a null Level
-     * and with useParentHandlers set to true.
-     *
-     * @param name               A name for the logger.  This should
-     *                           be a dot-separated name and should normally
-     *                           be based on the package name or class name
-     *                           of the subsystem, such as java.net
-     *                           or javax.swing.  It may be null for anonymous Loggers.
-     * @param resourceBundleName name of ResourceBundle to be used for localizing
-     *                           messages for this logger.  May be null if none
-     *                           of the messages require localization.
-     * @throws MissingResourceException if the resourceBundleName is non-null and
-     *                                  no corresponding resource can be found.
-     */
-    protected AppLogger(String name, String resourceBundleName) {
-        super(name, resourceBundleName);
+public class AppLogger extends Handler {
+    public AppLogger() {}
+
+    @Override
+    public void publish(LogRecord record) {
+        System.out.println(new StringBuilder()
+                .append(record.getMillis())
+                .append(" - ")
+                .append(record.getSourceClassName())
+                .append("#")
+                .append(record.getSourceMethodName())
+                .append(" - ")
+                .append(record.getMessage()));
     }
-    public AppLogger() {
-        this("app", null);
+
+    @Override
+    public void flush() {
+
+    }
+
+    @Override
+    public void close() throws SecurityException {
+
     }
 }
