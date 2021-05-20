@@ -90,8 +90,8 @@
                 alert("Não foi possivel criar a sala");
                 console.log(resRoom)
             }
-            window.room_id = await resRoom.json();
-            console.log(window.room_id.data)
+            window.room_id = await resRoom.text();
+            console.log(window.room_id)
         }
         handle();
     </script>

@@ -1,10 +1,8 @@
 package io.tictactoe.www.api;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import io.tictactoe.controller.ResponseController;
 import io.tictactoe.controller.domain.MatchController;
 import io.tictactoe.controller.domain.board.Board;
-import io.tictactoe.model.Response;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -12,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/api/play")
 @ApplicationScoped
@@ -21,7 +20,7 @@ public class PlayRoute {
     MatchController mc;
 
     @GET
-    public Response<Board> jogar(
+    public Response jogar(
             @QueryParam("front_id") String front,
             @QueryParam("jogada") int jogada
     ) {

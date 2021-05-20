@@ -13,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/api/new-match")
 @ApplicationScoped
@@ -30,11 +31,11 @@ public class NewMatchRoute {
 
     @GET
     @RolesAllowed("user")
-    public ResponseController<String> iniciarPartida() {
-        return new ResponseController<>(() -> {
+    public Response iniciarPartida() {
+        return new ResponseController<String>(() -> {
             Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
             String match = matchController.getMatch(u);
             return match;
-        });
+        }).call();
     }
 }

@@ -1,8 +1,11 @@
 package io.tictactoe.model.db;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@RegisterForReflection
 @Entity
 //@Table(name = "tb_partida")
 public class Partida implements Serializable  {

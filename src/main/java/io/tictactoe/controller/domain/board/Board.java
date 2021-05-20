@@ -22,6 +22,10 @@ public class Board {
             null
     };
 
+    public BoardPlayer[] getPosicoes() {
+        return posicoes;
+    }
+
     public Board() {
         this.updateLastAction();
     }

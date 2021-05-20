@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 @QuarkusMain
 public class Main {
     public static void main(String[] args) {
-        LogManager.getLogManager().reset();
-        Logger rootLogger = LogManager.getLogManager().getLogger("");
-        rootLogger.addHandler(new AppLogger());
+//        LogManager.getLogManager().reset();
+//        Logger rootLogger = LogManager.getLogManager().getLogger("");
+//        rootLogger.addHandler(new AppLogger());
         Quarkus.run(args);
     }
 }

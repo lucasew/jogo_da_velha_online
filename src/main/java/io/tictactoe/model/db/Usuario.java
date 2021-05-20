@@ -1,5 +1,6 @@
 package io.tictactoe.model.db;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.quarkus.security.jpa.*;
 
 import javax.persistence.*;
@@ -9,10 +10,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegisterForReflection
 @Entity
 @UserDefinition
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "username", columnNames = {"nome"})
+    @UniqueConstraint(name = "username", columnNames = {"nome"})
 })
 //@Table(name = "tb_usuario")
 public class Usuario implements Serializable {
@@ -36,7 +38,7 @@ public class Usuario implements Serializable {
 
     @Roles
     @Transient
-    public String roles = "user"; // usado internamente pelo controle de acesso do quarkus
+    public final String roles = "user"; // usado internamente pelo controle de acesso do quarkus
 
     @Column
     @NotBlank(message="Senha não pode estar vazia")

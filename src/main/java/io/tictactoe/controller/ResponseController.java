@@ -1,29 +1,37 @@
 package io.tictactoe.controller;
 
-import io.tictactoe.model.Response;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.tictactoe.model.errors.AppException;
+import io.tictactoe.model.errors.NotFoundException;
 
+import javax.ws.rs.core.Response;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ResponseController<T> implements Callable<Response<T>> {
+@RegisterForReflection
+public class ResponseController<T> implements Callable<Response> {
+    private static final Logger LOGGER = Logger.getLogger(ResponseController.class.getName());
     private final Callable<T> action;
     public ResponseController(Callable<T> action) {
         this.action = action;
     }
 
     @Override
-    public Response<T> call() {
-        Response<T> res = new Response<>();
+    public Response call() {
         try {
-            res.data = action.call();
+            return Response.ok(action.call()).build();
+        }
+        catch (NotFoundException e) {
+            return Response.status(404, "Item não encontrado").build();
         }
         catch (AppException e) {
-            res.error = String.format("ERRO DE APLICAÇÃO: %s", e.getLocalizedMessage());
+            return Response.status(500, String.format("ERRO DE APLICAÇÃO: %s", e.getLocalizedMessage())).build();
         }
         catch (Throwable e) {
-            res.error = e.getLocalizedMessage();
+            LOGGER.log(Level.SEVERE, e.getLocalizedMessage());
             e.printStackTrace();
+            return Response.status(500, e.getLocalizedMessage()).build();
         }
-        return res;
     }
 }

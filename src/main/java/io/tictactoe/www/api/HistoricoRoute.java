@@ -15,6 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/api/historico")
@@ -32,8 +33,8 @@ public class HistoricoRoute {
 
     @GET
     @RolesAllowed("user")
-    public ResponseController<List<Partida>> getHistoricoDePartidas() throws UserNotFoundException {
+    public Response getHistoricoDePartidas() throws UserNotFoundException {
         Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
-        return new ResponseController<>(() -> hc.getPartidasJogadas(u));
+        return new ResponseController<>(() -> hc.getPartidasJogadas(u)).call();
     }
 }
