@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class MatchController {
     private Map<String, PlayerFrontend> matches = new HashMap<>();
@@ -25,6 +26,9 @@ public class MatchController {
 
     @Inject
     HistoricoController hc;
+
+    @Inject
+    Logger logger;
 
     public synchronized PlayerFrontend getPlayerFrontend(String key) throws NotFoundException {
         PlayerFrontend res = matches.getOrDefault(key, null);
@@ -75,6 +79,7 @@ public class MatchController {
     }
     private void handleEndOfMatchIfEnded(String room) throws NotFoundException {
         if (isMatchDone(room)) {
+            logger.info("Room " + room + " e seu adversário terminaram partida.");
             String adversary = this.adversaries.get(room);
             PlayerFrontend fx = this.getPlayerFrontend(room);
             PlayerFrontend fo = this.getPlayerFrontend(adversary);
@@ -101,6 +106,7 @@ public class MatchController {
         return PartidaResultado.DESISTENCIA;
     }
     public synchronized void playMatch(String room, int position) throws GameLogicException, NotYourTurnException, NotFoundException {
+        logger.info(String.format("Play: %s %d", room, position));
         handleEndOfMatchIfEnded(room);
         PlayerFrontend f = this.getPlayerFrontend(room);
         f.play(position);

@@ -7,10 +7,14 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UsuarioController {
     @Inject
     EntityManager em;
+
+    @Inject
+    Logger logger;
 
     public UsuarioController() {}
 
@@ -25,8 +29,9 @@ public class UsuarioController {
     }
 
     public Usuario createUsuario(String usuario, String senha) {
-            Usuario u = new Usuario(usuario, senha);
-            em.persist(u);
-            return u;
+        Usuario u = new Usuario(usuario, senha);
+        em.persist(u);
+        logger.info("Criado usuário: " + usuario);
+        return u;
     }
 }
