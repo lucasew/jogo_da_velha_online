@@ -2,10 +2,9 @@ package io.tictactoe.www.api;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import io.tictactoe.controller.ResponseController;
-import io.tictactoe.controller.db.MatchController;
-import io.tictactoe.controller.domain.state.GameState;
+import io.tictactoe.controller.db.UsuarioController;
+import io.tictactoe.controller.domain.MatchController;
 import io.tictactoe.model.db.Usuario;
-import io.tictactoe.model.errors.UserNotFoundException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -23,7 +22,7 @@ public class NewMatchRoute {
     SecurityIdentity identity;
 
     @Inject
-    GameState g;
+    UsuarioController uc;
 
     @Inject
     MatchController matchController;
@@ -32,8 +31,8 @@ public class NewMatchRoute {
     @RolesAllowed("user")
     public ResponseController<String> iniciarPartida() {
         return new ResponseController<>(() -> {
-            Usuario u = g.usuarioController.getUsuarioByUsername(identity.getPrincipal().getName());
-            return matchController.newMatch(u);
+            Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
+            return matchController.getMatch(u);
         });
     }
 }

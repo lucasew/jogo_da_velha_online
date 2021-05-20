@@ -3,7 +3,6 @@ package io.tictactoe.controller.db;
 import io.tictactoe.model.db.Partida;
 import io.tictactoe.model.db.Usuario;
 import io.tictactoe.model.result.PartidaJogada;
-import org.jboss.resteasy.annotations.LinkHeaderParam;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -24,5 +23,9 @@ public class HistoricoController {
             res.add(new PartidaJogada(u, p));
         });
         return res;
+    }
+
+    public void putPartida(Partida pu) {
+        em.persist(pu);
     }
 }

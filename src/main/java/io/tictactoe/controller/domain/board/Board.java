@@ -9,6 +9,8 @@ import java.time.Instant;
 public class Board {
     public long lastAction;
     private BoardPlayer turn = BoardPlayer.X; // X sempre começa
+    private Usuario xu;
+    private Usuario ou;
 
     private BoardPlayer[] posicoes = {
             null,
@@ -32,16 +34,17 @@ public class Board {
     }
     /**
      * Checa vencedor
+     * TODO: Implementar checagens
      * X se x ganhou
      * O se o ganhou
      * null se velha ou não definido
      * @return vencedor
      */
     public BoardResult checkWinner(BoardPlayer player) {
-        return null;
+        return BoardResult.INCOMPLETO;
     }
     public void play(BoardPlayer player, int position) throws GameLogicException, NotYourTurnException {
-        if (turn == player) {
+        if (turn != player) {
             throw new NotYourTurnException();
         }
         try {

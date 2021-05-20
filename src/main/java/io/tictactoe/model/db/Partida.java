@@ -20,8 +20,7 @@ public class Partida implements Serializable  {
     @Enumerated(EnumType.STRING)
     private PartidaResultado resultado;
 
-    public Partida(long id, Usuario jogadorA, Usuario jogadorB, PartidaResultado resultado) {
-        this.id = id;
+    public Partida(Usuario jogadorA, Usuario jogadorB, PartidaResultado resultado) {
         this.jogadorA = jogadorA;
         this.jogadorB = jogadorB;
         this.resultado = resultado;

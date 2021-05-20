@@ -1,7 +1,7 @@
 package io.tictactoe.www.api;
 
 import io.tictactoe.controller.ResponseController;
-import io.tictactoe.controller.domain.state.GameState;
+import io.tictactoe.controller.db.UsuarioController;
 import io.tictactoe.model.Response;
 
 import javax.annotation.security.PermitAll;
@@ -17,12 +17,12 @@ import javax.ws.rs.core.MediaType;
 @ApplicationScoped
 public class CadastroRoute {
     @Inject
-    GameState g;
+    UsuarioController g;
 
     @GET // TODO: mudar pra POST depois, deixei assim pra poder usar no browser
     @Transactional
     @PermitAll
     public Response cadastrar(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) {
-        return new ResponseController<>(() -> g.usuarioController.createUsuario(usuario, senha).getId()).call();
+        return new ResponseController<>(() -> g.createUsuario(usuario, senha).getId()).call();
     }
 }
