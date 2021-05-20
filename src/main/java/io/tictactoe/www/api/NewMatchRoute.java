@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 public class NewMatchRoute {
+
     @Inject
     SecurityIdentity identity;
 

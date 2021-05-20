@@ -2,19 +2,21 @@ package io.tictactoe.controller.db;
 
 import io.tictactoe.model.db.Usuario;
 import io.tictactoe.model.errors.UserNotFoundException;
+import io.tictactoe.utils.AppLogger;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.logging.Logger;
 
+@Singleton
 public class UsuarioController {
     @Inject
     EntityManager em;
 
     @Inject
-    Logger logger;
+    AppLogger appLogger;
 
     public UsuarioController() {}
 
@@ -31,7 +33,7 @@ public class UsuarioController {
     public Usuario createUsuario(String usuario, String senha) {
         Usuario u = new Usuario(usuario, senha);
         em.persist(u);
-        logger.info("Criado usuário: " + usuario);
+        appLogger.info("Criado usuário: " + usuario);
         return u;
     }
 }
