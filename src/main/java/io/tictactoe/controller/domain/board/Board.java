@@ -79,7 +79,6 @@ public class Board {
     }
     /**
      * Checa vencedor
-     * TODO: Implementar checagens
      * X se x ganhou
      * O se o ganhou
      * null se velha ou não definido

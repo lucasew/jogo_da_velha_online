@@ -19,7 +19,7 @@ public class CadastroRoute {
     @Inject
     UsuarioController usuarioController;
 
-    @GET // TODO: mudar pra POST depois, deixei assim pra poder usar no browser
+    @GET
     @Transactional
     @PermitAll
     public Response cadastrar(@QueryParam("usuario") String usuario, @QueryParam("senha") String senha) {
