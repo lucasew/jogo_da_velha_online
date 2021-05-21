@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 
 @Path("/api/cadastro")
 @Produces(MediaType.APPLICATION_JSON)
-//@Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class CadastroRoute {
     @Inject
