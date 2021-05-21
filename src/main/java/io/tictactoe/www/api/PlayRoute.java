@@ -24,8 +24,6 @@ public class PlayRoute {
         return new ResponseController<> (() -> {
             mc.playMatch(front, jogada);
             return "OK";
-//            Board board = mc.getPlayerFrontend(front).getBoard();
-//            return board;
         }).call();
     }
 }
