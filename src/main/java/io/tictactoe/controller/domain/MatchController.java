@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Singleton
@@ -34,8 +35,17 @@ public class MatchController {
     @Inject
     HistoricoController hc;
 
+    private synchronized void gc() {
+        LOGGER.info("MatchController: trigger match gc");
+        Object[] elements = this.matches.keySet().toArray();
+        for (int i = 0; i < elements.length; i++) {
+            try {
+                handleEndOfMatchIfEnded((String) elements[i]);
+            } catch (NotFoundException e) {} // se n existe só continua
+        }
+    }
+
     public synchronized PlayerFrontend getPlayerFrontend(String room) throws NotFoundException {
-//        System.out.println(String.format("'%s'", room));
         PlayerFrontend front = this.matches.get(room);
         if (front == null) {
             throw new NotFoundException();
@@ -53,7 +63,6 @@ public class MatchController {
     }
 
     public synchronized String getAdversaryName(String room) throws NotFoundException {
-//        LOGGER.info(String.format("frontends = %d, adversarios = %d", this.matches.size(), this.adversaries.size()));
         String adversary = this.getAdversaryFrontendID(room);
         PlayerFrontend f = this.getPlayerFrontend(adversary);
         Usuario u = f.getUsuario();
@@ -75,6 +84,7 @@ public class MatchController {
         matches.put(ids.second, new PlayerFrontend(board, BoardPlayer.O));
         adversaries.put(ids.first, ids.second);
         adversaries.put(ids.second, ids.first);
+        gc();
         return ids;
     }
 
@@ -103,17 +113,23 @@ public class MatchController {
         System.out.println(diff);
         return diff > 30;
     }
+
     @Transactional
     private void handleEndOfMatchIfEnded(String room) throws NotFoundException {
         if (isMatchDone(room)) {
-            LOGGER.info("Room " + room + " e seu adversário terminaram partida.");
+
             String adversary = this.adversaries.get(room);
             PlayerFrontend fx = this.getPlayerFrontend(room);
             PlayerFrontend fo = this.getPlayerFrontend(adversary);
             Usuario jx = fx.getUsuario();
             Usuario jo = fo.getUsuario();
-            hc.putPartida(new Partida(jx, jo, fromBoardResult(fx.getBoardResult())));
-            hc.putPartida(new Partida(jo, jx, fromBoardResult(fo.getBoardResult())));
+            if (fx.getBoardResult() != BoardResult.NOT_STARTED && fo.getBoardResult() != BoardResult.NOT_STARTED) {
+                LOGGER.info("Room " + room + " e seu adversário terminaram partida.");
+                hc.putPartida(new Partida(jx, jo, fromBoardResult(fx.getBoardResult())));
+                hc.putPartida(new Partida(jo, jx, fromBoardResult(fo.getBoardResult())));
+            } else {
+                LOGGER.info("Encontrada partida abandonada ou que não fechou a quantidade de usuários em tempo");
+            }
             this.adversaries.remove(room);
             this.adversaries.remove(adversary);
             this.matches.remove(room);
@@ -132,6 +148,7 @@ public class MatchController {
         }
         return PartidaResultado.DESISTENCIA;
     }
+
     public synchronized void playMatch(String room, int position) throws GameLogicException, NotYourTurnException, NotFoundException {
         LOGGER.info(String.format("Play: %s %d", room, position));
         PlayerFrontend f = this.getPlayerFrontend(room);
