@@ -105,26 +105,29 @@ public class MatchController {
 
     private boolean isMatchDone(String room) throws NotFoundException {
         PlayerFrontend f = this.getPlayerFrontend(room);
-        if (f.getBoard().isEnd()) {
-            return true;
-        }
         long unix = Instant.now().getEpochSecond();
         long diff = unix - f.getBoard().lastAction;
+        if (f.getBoard().isEnd() && diff > 10) {
+            return true;
+        }
+        if (f.getBoardResult() == BoardResult.NOT_STARTED && diff > 30) {
+            return true;
+        }
         System.out.println(diff);
-        return diff > 30;
+        return diff > 120;
     }
 
     @Transactional
     private void handleEndOfMatchIfEnded(String room) throws NotFoundException {
         if (isMatchDone(room)) {
-
             String adversary = this.adversaries.get(room);
             PlayerFrontend fx = this.getPlayerFrontend(room);
             PlayerFrontend fo = this.getPlayerFrontend(adversary);
             Usuario jx = fx.getUsuario();
             Usuario jo = fo.getUsuario();
+            LOGGER.info(String.format("Encerrando sala %s e %s", room, adversary));
             if (fx.getBoardResult() != BoardResult.NOT_STARTED && fo.getBoardResult() != BoardResult.NOT_STARTED) {
-                LOGGER.info("Room " + room + " e seu adversário terminaram partida.");
+                LOGGER.info(String.format("Persistindo board de %s e %s", room, adversary));
                 hc.putPartida(new Partida(jx, jo, fromBoardResult(fx.getBoardResult())));
                 hc.putPartida(new Partida(jo, jx, fromBoardResult(fo.getBoardResult())));
             } else {

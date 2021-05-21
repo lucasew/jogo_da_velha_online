@@ -107,13 +107,16 @@
             if (isNotificadoDoResultado) {
                 return
             }
+            isNotificadoDoResultado = true
             if (state == "LOSE") {
                 alert(`Você perdeu para ${adversary}`)
-                isNotificadoDoResultado = true
+
             }
             if (state == "WIN") {
                 alert(`Você ganhou de ${adversary}`)
-                isNotificadoDoResultado = true
+            }
+            if (state == "VELHA") {
+                alert(`Você empatou com ${adversary}`)
             }
         }
         let intervalTimeout = 0
