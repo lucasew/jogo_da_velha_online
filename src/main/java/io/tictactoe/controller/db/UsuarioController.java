@@ -1,6 +1,7 @@
 package io.tictactoe.controller.db;
 
 import io.tictactoe.model.db.Usuario;
+import io.tictactoe.model.errors.BadRequestException;
 import io.tictactoe.model.errors.UserNotFoundException;
 import io.tictactoe.utils.AppLogger;
 
@@ -29,10 +30,14 @@ public class UsuarioController {
         return l.get(0);
     }
 
-    public Usuario createUsuario(String usuario, String senha) {
-        Usuario u = new Usuario(usuario, senha);
-        em.persist(u);
-        LOGGER.info("Criado usuário: " + usuario);
-        return u;
+    public Usuario createUsuario(String usuario, String senha) throws BadRequestException {
+        try {
+            Usuario u = new Usuario(usuario, senha);
+            em.persist(u);
+            LOGGER.info("Criado usuário: " + usuario);
+            return u;
+        } catch (org.hibernate.exception.ConstraintViolationException e) {
+            throw new BadRequestException();
+        }
     }
 }

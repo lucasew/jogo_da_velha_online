@@ -83,9 +83,9 @@
         async function handle() {
             if (!await check_login()) {
                 alert("Você não está logado");
-                window.location.assign("login.html");
+                goto("/login.html");
             }
-            resRoom = await wrappedFetch("/api/new-match")
+            const resRoom = await wrappedFetch("/api/new-match")
             if (!resRoom.ok) {
                 alert("Não foi possivel criar a sala");
                 console.log(resRoom)
@@ -93,6 +93,22 @@
             window.room_id = await resRoom.text();
             console.log(window.room_id)
         }
+        setInterval(async () => {
+            if (window.room_id) {
+                const res = await wrappedFetch(`/api/board/${window.room_id}`)
+                if (res.status == 404) {
+                    updateAdversary("(procurando adversário)")
+                    return
+                } else {
+                    const json = await res.json()
+                    const {board, adversary} = json
+                    updateAdversary(adversary)
+                    updateBoard(board)
+                }
+            } else {
+                console.log("Sem partida definida")
+            }
+        }, 1000)
         handle();
     </script>
 </body>

@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 @Singleton
@@ -34,24 +35,31 @@ public class MatchController {
     @Inject
     HistoricoController hc;
 
-    public synchronized PlayerFrontend getPlayerFrontend(String key) throws NotFoundException {
-        PlayerFrontend res = matches.getOrDefault(key, null);
-        if (res == null) {
+    public synchronized PlayerFrontend getPlayerFrontend(String room) throws NotFoundException {
+//        System.out.println(String.format("'%s'", room));
+        PlayerFrontend front = this.matches.get(room);
+        if (front == null) {
             throw new NotFoundException();
         }
-        return res;
+        return front;
     }
 
     private String getAdversaryFrontendID(String room) throws NotFoundException {
         String ret = adversaries.getOrDefault(room, null);
         if (ret == null) {
+            LOGGER.warning(String.format("adversário de %s não encontrado", room));
             throw new NotFoundException();
         }
         return ret;
     }
 
     public synchronized String getAdversaryName(String room) throws NotFoundException {
-        return this.getPlayerFrontend(this.getAdversaryFrontendID(room)).getUsuario().getNome();
+        LOGGER.info(String.format("frontends = %d, adversarios = %d", this.matches.size(), this.adversaries.size()));
+        String adversary = this.getAdversaryFrontendID(room);
+        PlayerFrontend f = this.getPlayerFrontend(adversary);
+        Usuario u = f.getUsuario();
+        String ret = u.getNome();
+        return ret;
     }
 
     private Pair<String, String> generateMatchIDs() {
@@ -82,6 +90,7 @@ public class MatchController {
         }
         Pair<String, String> room = createRoom();
         queuedFrontend = room.first;
+        this.getPlayerFrontend(room.second).setUsuario(u);
         return room.second;
     }
     private boolean isMatchDone(String room) throws NotFoundException {

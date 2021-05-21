@@ -2,6 +2,7 @@ package io.tictactoe.controller;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.tictactoe.model.errors.AppException;
+import io.tictactoe.model.errors.BadRequestException;
 import io.tictactoe.model.errors.NotFoundException;
 
 import javax.ws.rs.core.Response;
@@ -24,6 +25,9 @@ public class ResponseController<T> implements Callable<Response> {
         }
         catch (NotFoundException e) {
             return Response.status(404, "Item não encontrado").build();
+        }
+        catch (BadRequestException e) {
+            return Response.status(400, "Bad request").build();
         }
         catch (AppException e) {
             return Response.status(500, String.format("ERRO DE APLICAÇÃO: %s", e.getLocalizedMessage())).build();

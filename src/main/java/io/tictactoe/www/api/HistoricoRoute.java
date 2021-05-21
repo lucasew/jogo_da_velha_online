@@ -33,8 +33,10 @@ public class HistoricoRoute {
 
     @GET
     @RolesAllowed("user")
-    public Response getHistoricoDePartidas() throws UserNotFoundException {
-        Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
-        return new ResponseController<>(() -> hc.getPartidasJogadas(u)).call();
+    public Response getHistoricoDePartidas() {
+        return new ResponseController<>(() -> {
+            Usuario u = uc.getUsuarioByUsername(identity.getPrincipal().getName());
+            return hc.getPartidasJogadas(u);
+        }).call();
     }
 }

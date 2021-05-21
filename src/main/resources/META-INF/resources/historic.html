@@ -45,6 +45,7 @@
             </tbody>
         </table>
     </main>
+    <script src="index.js"></script>
     <script>
         function addPartida(usuario, estado) {
             let row = document.createElement("tr")
@@ -56,7 +57,19 @@
             row.appendChild(eEstado)
             document.getElementById("partidas").appendChild(row)
         }
+        async function handle() {
+            const res = await wrappedFetch("/api/historico")
+            if (!res.ok) {
+                console.log(res)
+            }
+            if (res.status == 401) {
+                alert("Você não está logado")
+                goto("/login.html")
+            }
+            const json = await res.text()
+            console.log(json)
+        }
+        handle();
     </script>
-    <script src="index.js"></script>
 </body>
 </html>

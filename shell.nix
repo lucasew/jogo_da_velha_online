@@ -1,7 +1,7 @@
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    graalvm11-ce
+    openjdk11
     maven
     idea.idea-ultimate # i have a license from uni
   ];

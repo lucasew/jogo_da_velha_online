@@ -9,10 +9,10 @@ import java.time.Instant;
 public class Board {
     public long lastAction;
     private BoardPlayer turn = BoardPlayer.X; // X sempre começa
-    private Usuario xu;
-    private Usuario ou;
 
     private BoardPlayer[] posicoes = {
+            null,
+            null,
             null,
             null,
             null,
@@ -47,6 +47,7 @@ public class Board {
     public BoardResult checkWinner(BoardPlayer player) {
         return BoardResult.INCOMPLETO;
     }
+
     public void play(BoardPlayer player, int position) throws GameLogicException, NotYourTurnException {
         if (turn != player) {
             throw new NotYourTurnException();

@@ -19,11 +19,22 @@
     <header>
         <h1>Jogo da Velha Online</h1>
     </header>
-    <main>
+    <main id="main">
         <button onclick="goto('login.html')">Login</button>
         <button onclick="goto('cadastro.html')">Cadastro</button>
 
     </main>
     <script src="index.js"></script>
+    <script>
+        (async function () {
+            if (await check_login()) {
+                const root = document.getElementById("main")
+                const elem = document.createElement("button")
+                elem.onclick = () => goto("main.html")
+                elem.innerText = "Ir para a página de autenticado"
+                root.appendChild(elem)
+            }
+        })()
+    </script>
 </body>
 </html>

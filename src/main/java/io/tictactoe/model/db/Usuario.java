@@ -38,7 +38,7 @@ public class Usuario implements Serializable {
 
     @Roles
     @Transient
-    public final String roles = "user"; // usado internamente pelo controle de acesso do quarkus
+    public String roles = "user"; // usado internamente pelo controle de acesso do quarkus
 
     @Column
     @NotBlank(message="Senha não pode estar vazia")
