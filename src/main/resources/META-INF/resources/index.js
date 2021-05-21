@@ -83,9 +83,16 @@ async function handle_signup() {
     const res = await fetch(`/api/cadastro?usuario=${user}&senha=${password}`)
     if (res.status == 200) {
         alert("Cadastrado com sucesso")
+        goto("/login.html")
     } else {
         alert("Usuário já existente");
     }
     console.log(res)
 }
 
+async function handleRotaAutenticada() {
+    if (!await check_login()) {
+        alert("Você não está logado");
+        goto("/login.html");
+    }
+}

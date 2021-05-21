@@ -30,18 +30,18 @@
             </tr>
             </thead>
             <tbody id="partidas">
-            <tr>
-                <td>John Doe</td>
-                <td>Ganho</td>
-            </tr>
-            <tr>
-                <td>John Doe</td>
-                <td>Velha</td>
-            </tr>
-            <tr>
-                <td>John Doe</td>
-                <td>Abandonada</td>
-            </tr>
+<!--            <tr>-->
+<!--                <td>John Doe</td>-->
+<!--                <td>Ganho</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>John Doe</td>-->
+<!--                <td>Velha</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>John Doe</td>-->
+<!--                <td>Abandonada</td>-->
+<!--            </tr>-->
             </tbody>
         </table>
     </main>
@@ -57,16 +57,25 @@
             row.appendChild(eEstado)
             document.getElementById("partidas").appendChild(row)
         }
+        function normalizeResult(result) {
+            const dict = {
+                "PERDEU": "Perdido",
+                "GANHOU": "Ganhado",
+                "EMPATOU": "Empatado",
+                "DESISTENCIA": "Desistido"
+            }
+            return dict[result] || "Algo de errado não está certo"
+        }
         async function handle() {
+            await handleRotaAutenticada();
             const res = await wrappedFetch("/api/historico")
             if (!res.ok) {
                 console.log(res)
             }
-            if (res.status == 401) {
-                alert("Você não está logado")
-                goto("/login.html")
-            }
-            const json = await res.text()
+            const json = await res.json()
+            json.forEach((item) => {
+                addPartida(item.adversary, normalizeResult(item.resultado))
+            })
             console.log(json)
         }
         handle();

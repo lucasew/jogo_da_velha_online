@@ -12,16 +12,15 @@ import io.tictactoe.model.db.Usuario;
 import io.tictactoe.model.errors.GameLogicException;
 import io.tictactoe.model.errors.NotFoundException;
 import io.tictactoe.model.errors.NotYourTurnException;
-import io.tictactoe.utils.AppLogger;
 import io.tictactoe.utils.MatchIDGenerator;
 import io.tictactoe.utils.Pair;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 @Singleton
@@ -93,16 +92,18 @@ public class MatchController {
         this.getPlayerFrontend(room.second).setUsuario(u);
         return room.second;
     }
+
     private boolean isMatchDone(String room) throws NotFoundException {
         PlayerFrontend f = this.getPlayerFrontend(room);
-        BoardResult result = f.getBoardResult();
-        if (result != BoardResult.INCOMPLETO && result != BoardResult.NOT_STARTED) {
+        if (f.getBoard().isEnd()) {
             return true;
         }
         long unix = Instant.now().getEpochSecond();
         long diff = unix - f.getBoard().lastAction;
+        System.out.println(diff);
         return diff > 30;
     }
+    @Transactional
     private void handleEndOfMatchIfEnded(String room) throws NotFoundException {
         if (isMatchDone(room)) {
             LOGGER.info("Room " + room + " e seu adversário terminaram partida.");
@@ -133,8 +134,8 @@ public class MatchController {
     }
     public synchronized void playMatch(String room, int position) throws GameLogicException, NotYourTurnException, NotFoundException {
         LOGGER.info(String.format("Play: %s %d", room, position));
-        handleEndOfMatchIfEnded(room);
         PlayerFrontend f = this.getPlayerFrontend(room);
+        handleEndOfMatchIfEnded(room);
         f.play(position);
     }
 }

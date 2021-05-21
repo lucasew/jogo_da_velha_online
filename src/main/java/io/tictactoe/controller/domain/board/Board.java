@@ -101,6 +101,14 @@ public class Board {
         return BoardResult.INCOMPLETO;
     }
 
+    public boolean isEnd() {
+        BoardResult state = this.checkWinner(BoardPlayer.X);
+        if (state == BoardResult.INCOMPLETO || state == BoardResult.NOT_STARTED) {
+            return false;
+        }
+        return true;
+    }
+
     public static BoardPlayer togglePlayer(BoardPlayer player) {
         if (player == BoardPlayer.X) {
             return BoardPlayer.O;

@@ -86,6 +86,7 @@
             elem.style.cursor = 'pointer'
         }
         async function handle() {
+            await handleRotaAutenticada()
             if (!await check_login()) {
                 alert("Você não está logado");
                 goto("/login.html");

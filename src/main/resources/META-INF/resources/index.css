@@ -68,4 +68,8 @@ h1, p, a, th, td {
     color: var(--text);
 }
 
+h1 {
+    text-align: center;
+}
+
 

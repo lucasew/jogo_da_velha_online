@@ -13,10 +13,21 @@
     </header>
     <main>
         <div>
+            <h1>Bem vindo, <span id="user-welcome">usuário</span></h1>
             <button onclick="goto('/board.html')">Jogar</button>
             <button onclick="goto('/historic.html')">Ver histórico de partidas</button>
+            <button onclick="handle_deslogar()">Sair</button>
         </div>
     </main>
     <script src="index.js"></script>
+<script>
+    handleRotaAutenticada()
+    document.getElementById("user-welcome").innerText = getAuthenticationData().user
+    function handle_deslogar() {
+        localStorage.removeItem("user")
+        localStorage.removeItem("password")
+        goto("/")
+    }
+</script>
 </body>
 </html>
