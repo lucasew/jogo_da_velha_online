@@ -65,7 +65,7 @@
         }
         function play(pos) {
             return async () => {
-                const res = await wrappedFetch(`/api/play/${window.room_id}?jogada=${pos - 1}`)
+                const res = await wrappedFetch(`/api/play/${window.room_id}?jogada=${pos}`)
                 if (res.ok) {
                     alert("Jogada feita com sucesso")
                     return
@@ -82,15 +82,10 @@
         }
         for (let i = 1; i <= 9; i++) {
             const elem = document.getElementById(`pos${i}`)
-            elem.addEventListener('click', play(i))
+            elem.addEventListener('click', play(i - 1))
             elem.style.cursor = 'pointer'
         }
-        async function handle() {
-            await handleRotaAutenticada()
-            if (!await check_login()) {
-                alert("Você não está logado");
-                goto("/login.html");
-            }
+        async function handleNewMatch() {
             const resRoom = await wrappedFetch("/api/new-match")
             if (!resRoom.ok) {
                 alert("Não foi possivel criar a sala");
@@ -98,6 +93,14 @@
             }
             window.room_id = await resRoom.text();
             console.log(window.room_id)
+        }
+        async function handle() {
+            await handleRotaAutenticada()
+            if (!await check_login()) {
+                alert("Você não está logado");
+                goto("/login.html");
+            }
+            await handleNewMatch();
         }
         let isNotificadoDoResultado = false;
         function handleResultState(adversary, state) {
@@ -113,11 +116,16 @@
                 isNotificadoDoResultado = true
             }
         }
+        let intervalTimeout = 0
         setInterval(async () => {
+            intervalTimeout++;
             if (window.room_id) {
                 const res = await wrappedFetch(`/api/board/${window.room_id}`)
                 if (res.status == 404) {
                     updateAdversary("(procurando adversário)")
+                    if (intervalTimeout >= 10) {
+                        window.location.reload()
+                    }
                     return
                 } else {
                     const json = await res.json()

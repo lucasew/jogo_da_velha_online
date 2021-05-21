@@ -154,5 +154,8 @@ public class MatchController {
         PlayerFrontend f = this.getPlayerFrontend(room);
         handleEndOfMatchIfEnded(room);
         f.play(position);
+        if (isMatchDone(room)) {
+            gc();
+        }
     }
 }
