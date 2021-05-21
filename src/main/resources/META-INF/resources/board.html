@@ -118,10 +118,10 @@
         }
         let intervalTimeout = 0
         setInterval(async () => {
-            intervalTimeout++;
             if (window.room_id) {
                 const res = await wrappedFetch(`/api/board/${window.room_id}`)
                 if (res.status == 404) {
+                    intervalTimeout++;
                     updateAdversary("(procurando adversário)")
                     if (intervalTimeout >= 10) {
                         window.location.reload()
@@ -137,6 +137,7 @@
                 }
             } else {
                 console.log("Sem partida definida")
+                intervalTimeout++;
             }
         }, 1000)
         handle();
