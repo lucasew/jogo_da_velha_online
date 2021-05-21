@@ -104,20 +104,22 @@
         }
         let isNotificadoDoResultado = false;
         function handleResultState(adversary, state) {
+            console.log("result state ", isNotificadoDoResultado)
             if (isNotificadoDoResultado) {
                 return
             }
-            isNotificadoDoResultado = true
-            if (state === "LOSE") {
-                alert(`Você perdeu para ${adversary}`)
-
+            const infos = {
+                "LOSE": `Você perdeu para ${adversary}`,
+                "WIN": `Você ganhou de ${adversary}`,
+                "EMPATE": `Você empatou com ${adversary}`
             }
-            if (state === "WIN") {
-                alert(`Você ganhou de ${adversary}`)
+            const selected = infos[state]
+            if (selected != undefined) {
+                isNotificadoDoResultado = true
+            } else {
+                return
             }
-            if (state === "EMPATE") {
-                alert(`Você empatou com ${adversary}`)
-            }
+            alert(selected)
         }
         let intervalTimeout = 0
         setInterval(async () => {
