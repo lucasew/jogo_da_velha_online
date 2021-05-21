@@ -21,14 +21,14 @@ function getAuthenticationElement(element) {
     const ls = localStorage.getItem(element);
     if (elem == null) {
         if (ls == null) {
-            console.log(`${elem} não está no localstorage`)
+            // console.log(`${elem} não está no localstorage`)
             return "";
         } else {
-            console.log(`encontrado ${element} no localstorage`)
+            // console.log(`encontrado ${element} no localstorage`)
             return ls;
         }
     } else {
-        console.log(`encontrado ${element} em formulário`)
+        // console.log(`encontrado ${element} em formulário`)
         return elem.value;
     }
 }
@@ -40,7 +40,7 @@ function getAuthenticationData() {
         user,
         password
     }
-    console.log(ret)
+    // console.log(ret)
     return ret;
 }
 

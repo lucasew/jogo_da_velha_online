@@ -55,7 +55,6 @@
     <script src="index.js"></script>
 <script>
         function updateBoard(board) {
-            let elems = []
             for (let i = 1; i <= 9; i++) {
                 const node = document.getElementById(`pos${i}`)
                 node.innerText = board[i - 1]
@@ -65,8 +64,20 @@
             document.getElementById("adversary").innerText = adv
         }
         function play(pos) {
-            return () => {
-                alert(`Você jogou a casa ${pos}`)
+            return async () => {
+                const res = await wrappedFetch(`/api/play/${window.room_id}?jogada=${pos - 1}`)
+                if (res.ok) {
+                    alert("Jogada feita com sucesso")
+                    return
+                }
+                if (res.status == 400) {
+                    const msg = await res.text()
+                    alert(msg)
+                    return
+                }
+                alert("Erros")
+                console.log(res)
+                console.log(await res.text())
             }
         }
         function voceGanhou(adv) {
@@ -101,6 +112,7 @@
                     return
                 } else {
                     const json = await res.json()
+                    console.log(json)
                     const {board, adversary} = json
                     updateAdversary(adversary)
                     updateBoard(board)

@@ -54,7 +54,7 @@ public class MatchController {
     }
 
     public synchronized String getAdversaryName(String room) throws NotFoundException {
-        LOGGER.info(String.format("frontends = %d, adversarios = %d", this.matches.size(), this.adversaries.size()));
+//        LOGGER.info(String.format("frontends = %d, adversarios = %d", this.matches.size(), this.adversaries.size()));
         String adversary = this.getAdversaryFrontendID(room);
         PlayerFrontend f = this.getPlayerFrontend(adversary);
         Usuario u = f.getUsuario();

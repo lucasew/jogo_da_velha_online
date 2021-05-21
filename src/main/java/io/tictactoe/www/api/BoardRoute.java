@@ -5,6 +5,8 @@ import io.tictactoe.controller.ResponseController;
 import io.tictactoe.controller.domain.MatchController;
 import io.tictactoe.controller.domain.board.Board;
 import io.tictactoe.controller.domain.board.BoardPlayer;
+import io.tictactoe.controller.domain.board.BoardResult;
+import io.tictactoe.controller.domain.board.PlayerFrontend;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,10 +26,11 @@ public class BoardRoute {
             @PathParam("front_id") String front
     ) {
         return new ResponseController<>(() -> {
-            Board board = mc.getPlayerFrontend(front).getBoard();
-            System.out.println(board);
+            PlayerFrontend f = mc.getPlayerFrontend(front);
+            Board board = f.getBoard();
+//            System.out.println(board);
             String adversary = mc.getAdversaryName(front);
-            return new BoardRouteResult(board, adversary);
+            return new BoardRouteResult(board, adversary, f.getBoardResult());
         }).call();
     }
 }
@@ -36,10 +39,12 @@ public class BoardRoute {
 class BoardRouteResult {
     public BoardPlayer[] board;
     public String adversary;
+    public BoardResult result;
 
-    public BoardRouteResult(Board board, String adversary) {
+    public BoardRouteResult(Board board, String adversary, BoardResult result) {
         this.board = board.getPosicoes();
         this.adversary = adversary;
+        this.result = result;
     }
 }
 

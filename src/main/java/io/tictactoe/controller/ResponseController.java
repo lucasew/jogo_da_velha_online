@@ -1,9 +1,7 @@
 package io.tictactoe.controller;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.tictactoe.model.errors.AppException;
-import io.tictactoe.model.errors.BadRequestException;
-import io.tictactoe.model.errors.NotFoundException;
+import io.tictactoe.model.errors.*;
 
 import javax.ws.rs.core.Response;
 import java.util.concurrent.Callable;
@@ -22,6 +20,12 @@ public class ResponseController<T> implements Callable<Response> {
     public Response call() {
         try {
             return Response.ok(action.call()).build();
+        }
+        catch (GameLogicException e) {
+            return Response.status(400).entity("Jogada inválida").build();
+        }
+        catch (NotYourTurnException e) {
+            return Response.status(400).entity("Não é a sua vez").build();
         }
         catch (NotFoundException e) {
             return Response.status(404, "Item não encontrado").build();

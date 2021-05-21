@@ -53,9 +53,15 @@ public class Board {
             throw new NotYourTurnException();
         }
         try {
-            throw new GameLogicException("Não implementado (ainda)");
+            this.posicoes[position] = player;
+//            throw new GameLogicException("Não implementado (ainda)");
         } finally { // Sempre vai executar depois do bloco de cima sair
             this.updateLastAction();
+            if (this.turn == BoardPlayer.O) {
+                this.turn = BoardPlayer.X;
+            } else {
+                this.turn = BoardPlayer.O;
+            }
         }
     }
 }
