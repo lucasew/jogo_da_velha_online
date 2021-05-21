@@ -28,7 +28,6 @@ public class BoardRoute {
         return new ResponseController<>(() -> {
             PlayerFrontend f = mc.getPlayerFrontend(front);
             Board board = f.getBoard();
-//            System.out.println(board);
             String adversary = mc.getAdversaryName(front);
             return new BoardRouteResult(board, adversary, f.getBoardResult());
         }).call();

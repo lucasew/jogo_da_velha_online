@@ -62,10 +62,10 @@ public class Board {
     public boolean isStarted() {
         for (int i = 0; i < 9; i++) {
             if (this.posicoes[i] != null) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
     private boolean isPlayerWon(BoardPlayer player) {
         return checkConditionTriple(player, 0, 1, 2) // horizontal

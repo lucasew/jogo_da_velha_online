@@ -80,12 +80,6 @@
                 console.log(await res.text())
             }
         }
-        function voceGanhou(adv) {
-            alert(`Você ganhou de ${adv}!`)
-        }
-        function vocePerdeu(adv) {
-            alert(`Você perdeu de ${adv}!`)
-        }
         for (let i = 1; i <= 9; i++) {
             const elem = document.getElementById(`pos${i}`)
             elem.addEventListener('click', play(i))
@@ -104,6 +98,20 @@
             window.room_id = await resRoom.text();
             console.log(window.room_id)
         }
+        let isNotificadoDoResultado = false;
+        function handleResultState(adversary, state) {
+            if (isNotificadoDoResultado) {
+                return
+            }
+            if (state == "LOSE") {
+                alert(`Você perdeu para ${adversary}`)
+                isNotificadoDoResultado = true
+            }
+            if (state == "WIN") {
+                alert(`Você ganhou de ${adversary}`)
+                isNotificadoDoResultado = true
+            }
+        }
         setInterval(async () => {
             if (window.room_id) {
                 const res = await wrappedFetch(`/api/board/${window.room_id}`)
@@ -113,9 +121,10 @@
                 } else {
                     const json = await res.json()
                     console.log(json)
-                    const {board, adversary} = json
+                    const {board, adversary, result} = json
                     updateAdversary(adversary)
                     updateBoard(board)
+                    handleResultState(adversary, result)
                 }
             } else {
                 console.log("Sem partida definida")

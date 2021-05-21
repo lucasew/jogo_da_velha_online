@@ -95,7 +95,8 @@ public class MatchController {
     }
     private boolean isMatchDone(String room) throws NotFoundException {
         PlayerFrontend f = this.getPlayerFrontend(room);
-        if (f.getBoardResult() != BoardResult.INCOMPLETO) {
+        BoardResult result = f.getBoardResult();
+        if (result != BoardResult.INCOMPLETO && result != BoardResult.NOT_STARTED) {
             return true;
         }
         long unix = Instant.now().getEpochSecond();
