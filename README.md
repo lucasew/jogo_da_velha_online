@@ -1,58 +1,20 @@
-# server project
+# Jogo da Velha Online
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Implementação do jogo da velha usando Java e o framework Quarkus.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+O boilerplate e os scripts são os mesmos do framework original então os comandos são os mesmos.
 
-## Running the application in dev mode
+Este projeto funciona com banco postgresql e está sendo hospedado em https://jogo-da-velha-online-lpoo.herokuapp.com/
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
+**Configuração necessária -- Variáveis de ambiente**
+- `DATABASE_HOST`: Host do banco de dados postgres
+- `DATABASE_NAME`: Nome do banco de dados no host
+- `DATABASE_PASSWD`: Senha do banco de dados
+- `DATABASE_PORT`: Porta do banco de dados, geralmente 5432
+- `DATABASE_USER`: Usuário do banco de dados
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+Ao executar o comando para iniciar a aplicação em modo dev o Quarkus vai tentar subir um container do postgres via Docker e vai configurar tudo azeitadinho.
 
-## Packaging and running the application
+Se você não tem Docker para o ambiente dev não sei o que acontece, no pior dos casos a aplicação só dá pau e nem sobe.
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/server-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
-
-## Related guides
-
-- WebSockets ([guide](https://quarkus.io/guides/websockets)): WebSocket communication channel support
-
-## Provided examples
-
-### WebSockets example using Undertow
-
-Discover WebSockets using Undertow with this cool supersonic chat example. Open multiple tabs to simulate different users.
-
-[Related guide section...](https://quarkus.io/guides/websockets)
+Fiz esse projeto no Intellij, como é um projeto Maven pode pegar em basicamente qualquer IDE Java mas eu não garanto. Se alguém testar reporta nas issues por favor hehehe.
