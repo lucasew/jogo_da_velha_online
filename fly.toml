@@ -1,0 +1,28 @@
+app = "jogo-da-velha-online-lpoo2"
+primary_region = "gig"
+
+kill_signal = "SIGTERM"
+kill_timeout = 5
+
+
+[build]
+dockerfile = "src/main/docker/Dockerfile.native"
+
+[deploy]
+strategy = "immediate" # not critical
+
+[env]
+PORT = 8080
+
+[http_service]
+internal_port = 8080
+force_https = true
+
+[http_service.concurrency]
+type = "connections"
+soft_limit = 10
+hard_limit = 20
+
+[[vm]]
+size = "shared-cpu-1x"
+
